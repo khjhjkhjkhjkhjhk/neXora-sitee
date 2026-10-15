@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORA</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #030204;
+    background-image:
+        radial-gradient(ellipse at 15% 80%, rgba(111,0,255,.12), transparent 40%),
+        radial-gradient(ellipse at 85% 20%, rgba(190,0,255,.10), transparent 38%);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Fioletowa poświata */
+body::before {
+    content: "";
+    position: fixed;
+    width: 420px;
+    height: 300px;
+    background: #8500ff;
+    filter: blur(150px);
+    opacity: .16;
+    border-radius: 50%;
+    animation: aura 5s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Animowane fale */
+body::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 0;
+    pointer-events: none;
+    background: repeating-radial-gradient(
+        ellipse at 50% 50%,
+        transparent 0,
+        transparent 65px,
+        rgba(151,35,255,.12) 67px,
+        rgba(151,35,255,.03) 70px,
+        transparent 100px
+    );
+    filter: blur(2px);
+    opacity: .8;
+    animation: waveFlow 22s linear infinite;
+}
+
+/* Podpis autora */
+.signature {
+    position: fixed;
+    top: 28px;
+    left: 32px;
+    z-index: 10;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(210,185,230,.65);
+    text-shadow: 0 0 12px rgba(160,32,240,.25);
+    animation: signatureGlow 3s ease-in-out infinite alternate;
+}
+
+.signature span {
+    color: #c77dff;
+    text-shadow:
+        0 0 7px rgba(160,32,240,.8),
+        0 0 16px rgba(130,0,255,.4);
+}
+
+/* Główna zawartość */
+.hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Poświata pod logo */
+.hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    bottom: -180px;
+    width: min(700px, 100vw);
+    height: 240px;
+    transform: translateX(-50%);
+    background: rgba(130,0,255,.18);
+    filter: blur(100px);
+    border-radius: 50%;
+    animation: bottomGlow 7s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* Napis pisany piórem */
+.tagline {
+    font-family: "Segoe Script", "Brush Script MT", cursive;
+    font-size: clamp(17px, 2.5vw, 30px);
+    font-style: italic;
+    font-weight: 500;
+    text-align: center;
+    color: #c77dff;
+    margin-bottom: 4px;
+    text-shadow:
+        0 0 6px rgba(160,32,240,.8),
+        0 0 18px rgba(130,0,255,.5);
+    animation: taglineGlow 3s ease-in-out infinite alternate;
+}
+
+/* Logo NEXORA */
+.logo {
+    position: relative;
+    font-size: clamp(65px, 13vw, 155px);
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: transparent;
+    background: linear-gradient(
+        115deg,
+        #6e00c9 0%,
+        #d9b5ff 20%,
+        #a020f0 35%,
+        #f7eaff 48%,
+        #9b30ff 60%,
+        #6500b8 80%,
+        #e6c9ff 100%
+    );
+    background-size: 250% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 1px rgba(205,150,255,.6);
+    filter:
+        drop-shadow(0 0 8px rgba(160,32,240,.9))
+        drop-shadow(0 0 28px rgba(130,0,255,.6));
+    animation:
+        shine 5s linear infinite,
+        float 4s ease-in-out infinite,
+        glow 3s ease-in-out infinite alternate;
+}
+
+/* Szklany refleks na logo */
+.logo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 35%,
+        rgba(255,255,255,.75) 49%,
+        transparent 60%
+    );
+    background-size: 250% 100%;
+    background-position: -150% 0;
+    animation: reflection 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Przycisk POBIERZ */
+.download-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 15px 30px;
+    min-width: 190px;
+    border: 1px solid rgba(190,100,255,.55);
+    border-radius: 14px;
+    background: linear-gradient(
+        135deg,
+        rgba(150,40,255,.18),
+        rgba(60,15,90,.12)
+    );
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: #ead5ff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 0 20px rgba(140,0,255,.12);
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        border-color .3s ease,
+        background .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease;
+}
+
+.download-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255,255,255,.18),
+        transparent
+    );
+    transform: skewX(-20deg);
+    animation: buttonShine 5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.download-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.download-arrow {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: #c77dff;
+    transition: transform .3s ease;
+}
+
+.download-btn:hover {
+    border-color: #c77dff;
+    background: rgba(150,40,255,.24);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.2),
+        0 0 25px rgba(160,32,240,.3),
+        0 0 50px rgba(130,0,255,.12);
+    transform: translateY(-3px);
+}
+
+.download-btn:hover .download-arrow {
+    transform: translateY(3px);
+}
+
+/* Informacja o darmowym programie */
+.free-text {
+    margin-top: 14px;
+    max-width: 90vw;
+    color: rgba(207,165,255,.75);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    line-height: 1.8;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(160,32,240,.4);
+    animation: freeGlow 3s ease-in-out infinite alternate;
+}
+
+/* Okno pobierania */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0,0,0,.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 35px 28px;
+    text-align: center;
+    background: #100a18;
+    border: 1px solid rgba(190,100,255,.65);
+    border-radius: 16px;
+    box-shadow:
+        0 0 30px rgba(130,0,255,.25),
+        0 0 80px rgba(130,0,255,.12);
+    animation: modalAppear .3s ease;
+}
+
+.modal h2 {
+    margin-bottom: 16px;
+    color: #d9b5ff;
+    font-size: 25px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(160,32,240,.5);
+}
+
+.modal p {
+    margin-bottom: 20px;
+    color: #d0c2dd;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.modal-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(190,100,255,.55);
+    border-radius: 9px;
+    background: rgba(150,40,255,.12);
+    color: #ead5ff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+.modal-btn:hover {
+    background: rgba(150,40,255,.28);
+    border-color: #d9b5ff;
+    box-shadow: 0 0 20px rgba(160,32,240,.25);
+}
+
+.modal-btn.primary {
+    background: linear-gradient(110deg, #7200bd, #a020f0);
+    border-color: #c77dff;
+    color: white;
+}
+
+.modal-btn.primary:hover {
+    background: linear-gradient(110deg, #8c00e8, #bd50ff);
+    box-shadow: 0 0 25px rgba(160,32,240,.45);
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    border: none;
+    background: transparent;
+    color: #bca5d6;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+#downloadStatus {
+    margin-top: 14px;
+    margin-bottom: 0;
+    font-size: 11px;
+    color: #bca5d6;
+}
+
+@keyframes shine {
+    to { background-position: 250% center; }
+}
+
+@keyframes reflection {
+    0%, 20% { background-position: -150% 0; }
+    65%, 100% { background-position: 150% 0; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+}
+
+@keyframes glow {
+    from {
+        filter:
+            drop-shadow(0 0 7px rgba(160,32,240,.6))
+            drop-shadow(0 0 20px rgba(130,0,255,.3));
+    }
+    to {
+        filter:
+            drop-shadow(0 0 13px rgba(190,100,255,1))
+            drop-shadow(0 0 40px rgba(130,0,255,.7));
+    }
+}
+
+@keyframes aura {
+    from { transform: scale(.8); opacity: .12; }
+    to { transform: scale(1.2); opacity: .24; }
+}
+
+@keyframes taglineGlow {
+    from {
+        text-shadow: 0 0 5px #7b00cc;
+        opacity: .8;
+    }
+    to {
+        text-shadow: 0 0 10px #c77dff, 0 0 24px #8a2be2;
+        opacity: 1;
+    }
+}
+
+@keyframes signatureGlow {
+    from { opacity: .65; }
+    to { opacity: 1; }
+}
+
+@keyframes buttonShine {
+    0%, 15% { left: -120%; }
+    45%, 100% { left: 160%; }
+}
+
+@keyframes waveFlow {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.12); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes bottomGlow {
+    from { opacity: .35; scale: .8; }
+    to { opacity: .8; scale: 1.15; }
+}
+
+@keyframes freeGlow {
+    from {
+        opacity: .55;
+        text-shadow: 0 0 5px rgba(160,32,240,.25);
+    }
+    to {
+        opacity: 1;
+        text-shadow: 0 0 14px rgba(180,100,255,.65);
+    }
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Małe ekrany */
+@media (max-width: 500px) {
+    .hero { gap: 12px; }
+
+    .tagline {
+        max-width: 340px;
+        line-height: 1.5;
+    }
+
+    .signature {
+        top: 18px;
+        left: 16px;
+        font-size: 9px;
+        letter-spacing: 1.5px;
+    }
+
+    .free-text {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+    }
+
+    .modal {
+        padding: 34px 20px 24px;
+    }
+}
+
+/* Ograniczenie ruchu */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="signature">
+    MADE BY <span>IGOR PRUS</span> © 2026
+</div>
+
+<main class="hero">
+
+    <p class="tagline">
+        najlepsza aplikacja do zarządzania komputerem
+    </p>
+
+    <h1 class="logo">NEXORA</h1>
+
+    <button class="download-btn" type="button" id="openDownload">
+        <span>POBIERZ</span>
+        <span class="download-arrow">↓</span>
+    </button>
+
+    <p class="free-text">
+        POBIERZ CAŁKOWICIE ZA DARMO CAŁY PROGRAM
+    </p>
+
+</main>
+
+<!-- Okno pojawiające się po kliknięciu POBIERZ -->
+<div class="modal-overlay" id="downloadModal" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+        <button class="close-modal" type="button" id="closeDownload" aria-label="Zamknij">
+            &times;
+        </button>
+
+        <h2 id="modalTitle">NEXORA DOWNLOAD</h2>
+
+        <p>
+            To use NEXORA, you need to have Python installed on your computer.
+            If you don't have Python, download and install it first.
+        </p>
+
+        <a
+            class="modal-btn"
+            href="https://www.python.org/downloads/"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            DOWNLOAD PYTHON
+        </a>
+
+        <a
+            class="modal-btn primary"
+            href="https://files.catbox.moe/dppllz.zip"
+        >
+            DOWNLOAD NEXORA
+        </a>
+
+        <p id="downloadStatus">Choose a download option above.</p>
+
+    </section>
+</div>
+
+<script>
+const downloadModal = document.getElementById("downloadModal");
+const openDownload = document.getElementById("openDownload");
+const closeDownload = document.getElementById("closeDownload");
+
+function showDownloadModal() {
+    downloadModal.classList.add("active");
+    downloadModal.setAttribute("aria-hidden", "false");
+}
+
+function hideDownloadModal() {
+    downloadModal.classList.remove("active");
+    downloadModal.setAttribute("aria-hidden", "true");
+}
+
+openDownload.addEventListener("click", showDownloadModal);
+closeDownload.addEventListener("click", hideDownloadModal);
+
+downloadModal.addEventListener("click", function(event) {
+    if (event.target === downloadModal) {
+        hideDownloadModal();
+    }
+});
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        hideDownloadModal();
+    }
+});
+</script>
+
+</body>
+</html>
+
